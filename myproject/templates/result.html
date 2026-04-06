@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if error %}
+    <p><strong>{{ error }}</strong></p>
+{% else %}
+    <p>
+        {{ val1 }} {{ operation_label }} {{ val2 }} = <strong>{{ result }}</strong>
+    </p>
+{% endif %}
+
+<p><a href="{% url 'home' %}">Back to calculator</a></p>
+
+{% endblock %}
