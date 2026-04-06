@@ -1,30 +1,157 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Registration</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Create account — Travelling</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+	<link href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" type="text/css" href="{% static 'styles/main_styles.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'styles/responsive.css' %}">
+	<style>
+		.auth-page {
+			min-height: 100vh;
+			background: linear-gradient(180deg, #f4f6f8 0%, #e8ecf0 100%);
+			padding-top: 2rem;
+			padding-bottom: 3rem;
+		}
+		.auth-card {
+			border-radius: 8px;
+			box-shadow: 0 8px 32px rgba(24, 24, 24, 0.08);
+		}
+		.auth-card .card-title {
+			font-family: 'Oswald', sans-serif;
+			font-weight: 400;
+			color: #181818;
+		}
+		.auth-card label {
+			font-size: 14px;
+			font-weight: 600;
+			color: #181818;
+			margin-bottom: 0.35rem;
+		}
+		.auth-card .form-control {
+			border-radius: 4px;
+			border-color: #d4d8dc;
+			padding: 0.55rem 0.75rem;
+		}
+		.auth-card .form-control:focus {
+			border-color: #181818;
+			box-shadow: 0 0 0 0.15rem rgba(24, 24, 24, 0.12);
+		}
+		.auth-card .btn-primary {
+			background: #181818;
+			border-color: #181818;
+			border-radius: 4px;
+			padding: 0.55rem 1.25rem;
+			font-weight: 600;
+		}
+		.auth-card .btn-primary:hover {
+			background: #333;
+			border-color: #333;
+		}
+		.auth-footer-note {
+			font-size: 14px;
+			color: #72728c;
+		}
+		.field-hint {
+			font-size: 12px;
+			color: #72728c;
+			margin-top: 0.25rem;
+		}
+	</style>
 </head>
 <body>
-    <form action="register" method="post">
-        {% csrf_token %}
 
-        <input type="text" name="first_name" placeholder="First Name"><br>
-        <input type="text" name="last_name" placeholder="Last Name"><br>
-        <input type="text" name="username" placeholder="Username"><br>
-        <input type="email" name="email" placeholder="email"><br>
-        <input type="password" name="password1" placeholder="Password"><br>
-        <input type="password" name="password2" placeholder="Confirm Password"><br>
-        <input type="Submit">
+<div class="auth-page">
+	<div class="container">
+		<div class="text-center mb-4">
+			<a href="{% url 'index' %}" class="text-dark" style="font-family: 'Oswald', sans-serif; font-size: 28px; text-decoration: none;">Travelling</a>
+		</div>
 
+		<div class="row justify-content-center">
+			<div class="col-md-8 col-lg-6">
+				<div class="card auth-card border-0">
+					<div class="card-body p-4 p-md-5">
+						<h1 class="card-title h4 mb-2">Create account</h1>
+						<p class="text-muted small mb-4">Fill in the form below. All fields are required.</p>
 
-    </form>
+						{% if messages %}
+							{% for message in messages %}
+								<div class="alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% elif message.tags == 'warning' %}alert-warning{% else %}alert-info{% endif %} alert-dismissible fade show" role="alert">
+									<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+									{% if message.tags == 'error' %}
+										<strong><i class="fa fa-exclamation-circle" aria-hidden="true"></i></strong>
+									{% elif message.tags == 'success' %}
+										<strong><i class="fa fa-check-circle" aria-hidden="true"></i></strong>
+									{% else %}
+										<strong><i class="fa fa-info-circle" aria-hidden="true"></i></strong>
+									{% endif %}
+									<span class="ml-1">{{ message }}</span>
+								</div>
+							{% endfor %}
+						{% endif %}
 
-    <div>
-        {% for message in messages %}
-        <h3>{{ message }}</h3>
-        {% endfor %}
-    </div>
+						<form method="post" action="{% url 'register' %}" novalidate>
+							{% csrf_token %}
 
+							<div class="form-row">
+								<div class="form-group col-md-6">
+									<label for="id_first_name">First name</label>
+									<input type="text" class="form-control" id="id_first_name" name="first_name" required autocomplete="given-name" placeholder="First name">
+								</div>
+								<div class="form-group col-md-6">
+									<label for="id_last_name">Last name</label>
+									<input type="text" class="form-control" id="id_last_name" name="last_name" required autocomplete="family-name" placeholder="Last name">
+								</div>
+							</div>
 
+							<div class="form-group">
+								<label for="id_username">Username</label>
+								<input type="text" class="form-control" id="id_username" name="username" required autocomplete="username" placeholder="Choose a username">
+								<p class="field-hint mb-0">Letters, digits, and @ . + - _ only.</p>
+							</div>
+
+							<div class="form-group">
+								<label for="id_email">Email</label>
+								<input type="email" class="form-control" id="id_email" name="email" required autocomplete="email" placeholder="you@example.com">
+							</div>
+
+							<div class="form-group">
+								<label for="id_password1">Password</label>
+								<input type="password" class="form-control" id="id_password1" name="password1" required autocomplete="new-password" placeholder="Create a password">
+								<p class="field-hint mb-0">Use at least 8 characters for a stronger password.</p>
+							</div>
+
+							<div class="form-group">
+								<label for="id_password2">Confirm password</label>
+								<input type="password" class="form-control" id="id_password2" name="password2" required autocomplete="new-password" placeholder="Repeat your password">
+								<p class="field-hint mb-0">Must match the password above.</p>
+							</div>
+
+							<button type="submit" class="btn btn-primary btn-block mt-2">Create account</button>
+						</form>
+
+						<hr class="my-4">
+
+						<p class="auth-footer-note text-center mb-0">
+							Already have an account?
+							<a href="{% url 'login' %}">Sign in</a>
+							·
+							<a href="{% url 'index' %}">Back to home</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'styles/bootstrap4/popper.js' %}"></script>
+<script src="{% static 'styles/bootstrap4/bootstrap.min.js' %}"></script>
 </body>
 </html>

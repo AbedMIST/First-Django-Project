@@ -1,25 +1,128 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Login</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Sign in — Travelling</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'styles/bootstrap4/bootstrap.min.css' %}">
+	<link href="{% static 'plugins/font-awesome-4.7.0/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" type="text/css" href="{% static 'styles/main_styles.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'styles/responsive.css' %}">
+	<style>
+		.auth-page {
+			min-height: 100vh;
+			background: linear-gradient(180deg, #f4f6f8 0%, #e8ecf0 100%);
+			padding-top: 2rem;
+			padding-bottom: 3rem;
+		}
+		.auth-card {
+			border-radius: 8px;
+			box-shadow: 0 8px 32px rgba(24, 24, 24, 0.08);
+		}
+		.auth-card .card-title {
+			font-family: 'Oswald', sans-serif;
+			font-weight: 400;
+			color: #181818;
+		}
+		.auth-card label {
+			font-size: 14px;
+			font-weight: 600;
+			color: #181818;
+			margin-bottom: 0.35rem;
+		}
+		.auth-card .form-control {
+			border-radius: 4px;
+			border-color: #d4d8dc;
+			padding: 0.55rem 0.75rem;
+		}
+		.auth-card .form-control:focus {
+			border-color: #181818;
+			box-shadow: 0 0 0 0.15rem rgba(24, 24, 24, 0.12);
+		}
+		.auth-card .btn-primary {
+			background: #181818;
+			border-color: #181818;
+			border-radius: 4px;
+			padding: 0.55rem 1.25rem;
+			font-weight: 600;
+		}
+		.auth-card .btn-primary:hover {
+			background: #333;
+			border-color: #333;
+		}
+		.auth-footer-note {
+			font-size: 14px;
+			color: #72728c;
+		}
+	</style>
 </head>
 <body>
 
-    <form type="login" method="post">
-        {% csrf_token %}
-        <input type="text" name="username" placeholder="Username"><br>
-        <input type="password" name="password" placeholder="Password"><br>
-        <input type="Submit">
+<div class="auth-page">
+	<div class="container">
+		<div class="text-center mb-4">
+			<a href="{% url 'index' %}" class="text-dark" style="font-family: 'Oswald', sans-serif; font-size: 28px; text-decoration: none;">Travelling</a>
+		</div>
 
-    </form>
+		<div class="row justify-content-center">
+			<div class="col-md-7 col-lg-5">
+				<div class="card auth-card border-0">
+					<div class="card-body p-4 p-md-5">
+						<h1 class="card-title h4 mb-2">Sign in</h1>
+						<p class="text-muted small mb-4">Enter your account details to continue.</p>
 
-    <div>
-        {% for message in messages %}
-        <h3>{{ message }}</h3>
-        {% endfor %}
-    </div>
+						{% if messages %}
+							{% for message in messages %}
+								<div class="alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% elif message.tags == 'warning' %}alert-warning{% else %}alert-info{% endif %} alert-dismissible fade show" role="alert">
+									<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+									{% if message.tags == 'error' %}
+										<strong><i class="fa fa-exclamation-circle" aria-hidden="true"></i></strong>
+									{% elif message.tags == 'success' %}
+										<strong><i class="fa fa-check-circle" aria-hidden="true"></i></strong>
+									{% else %}
+										<strong><i class="fa fa-info-circle" aria-hidden="true"></i></strong>
+									{% endif %}
+									<span class="ml-1">{{ message }}</span>
+								</div>
+							{% endfor %}
+						{% endif %}
 
+						<form method="post" action="{% url 'login' %}" novalidate>
+							{% csrf_token %}
 
+							<div class="form-group">
+								<label for="id_username">Username</label>
+								<input type="text" class="form-control" id="id_username" name="username" required autocomplete="username" placeholder="Your username">
+							</div>
+
+							<div class="form-group">
+								<label for="id_password">Password</label>
+								<input type="password" class="form-control" id="id_password" name="password" required autocomplete="current-password" placeholder="Your password">
+							</div>
+
+							<button type="submit" class="btn btn-primary btn-block mt-2">Sign in</button>
+						</form>
+
+						<hr class="my-4">
+
+						<p class="auth-footer-note text-center mb-0">
+							No account yet?
+							<a href="{% url 'register' %}">Create one</a>
+							·
+							<a href="{% url 'index' %}">Back to home</a>
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+<script src="{% static 'styles/bootstrap4/popper.js' %}"></script>
+<script src="{% static 'styles/bootstrap4/bootstrap.min.js' %}"></script>
 </body>
 </html>
