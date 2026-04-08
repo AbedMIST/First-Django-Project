@@ -50,7 +50,6 @@ def login(request):
         if user is not None:
             auth.login(request, user)
             print("Logged in successfully..")
-            # messages.info(request, "Logged in successfully")
 
             return redirect('/')
         else:
